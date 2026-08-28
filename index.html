@@ -173,7 +173,7 @@
 
         .grid-options {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(1, 1fr);
             gap: 10px;
             margin-bottom: 20px;
         }
@@ -181,10 +181,11 @@
         .option-card {
             position: relative;
             background-size: cover;
-            background-position: center;
+            /* Ajustado para centralizar melhor a foto e focar no topo/estátua */
+            background-position: center 20%; 
             border: 2px solid #63318a;
             border-radius: 15px;
-            height: 95px;
+            height: 150px; /* Aumentei um pouco a altura para valorizar a imagem */
             display: flex;
             align-items: flex-end;
             justify-content: center;
@@ -197,14 +198,14 @@
             position: relative;
             z-index: 2;
             color: #fff;
-            font-size: 0.85rem;
+            font-size: 1rem;
             font-weight: 600;
             padding-bottom: 10px;
             text-shadow: 0 1px 3px rgba(0,0,0,0.9);
             width: 100%;
             text-align: center;
             background: linear-gradient(to top, rgba(0,0,0,0.85) 40%, transparent 100%);
-            padding-top: 15px;
+            padding-top: 20px;
         }
 
         .option-card:hover {
@@ -213,8 +214,8 @@
         }
 
         .option-card.selected {
-            border-color: #b66cff;
-            box-shadow: 0 0 16px rgba(181, 92, 255, 0.75);
+            border-color: #63318a;
+            box-shadow: 0 0 12px #63318a;
             transform: scale(1.05);
         }
 
@@ -261,24 +262,23 @@
             </div>
         </div>
 
-        <!-- ETAPA 3 -->
+        <!-- ETAPA 3 (Data Fixa 29/08 e Hora) -->
         <div class="step" id="step-3">
             <div class="card">
-                <h2>📅 ESCOLHA UMA DATA</h2>
+                <h2>📅 QUAL O MELHOR HORÁRIO?</h2>
                 
-                <label class="label-input">Escolhe a data</label>
-                <input type="date" id="input-data" onchange="verificarCamposData()" onclick="this.showPicker && this.showPicker()">
+                <label class="label-input">Data (Fixada)</label>
+                <input type="date" id="input-data" disabled>
 
                 <label class="label-input">Escolhe o horário</label>
-                <input type="time" id="input-hora" value="18:00" onchange="verificarCamposData()" onclick="this.showPicker && this.showPicker()">
+                <input type="time" id="input-hora" value="18:00" onclick="this.showPicker && this.showPicker()">
 
-                <button class="btn" id="btn-proximo-data" style="opacity: 0.5; pointer-events: none;" onclick="salvarDataEAvancar()">SELECIONAR A DATA 🖤</button>
+                <button class="btn" id="btn-proximo-data" onclick="salvarDataEAvancar()">SELECIONAR O HORÁRIO 🖤</button>
             </div>
         </div>
 
-        
-        <!-- ETAPA 5 -->
-        <div class="step" id="step-5">
+        <!-- ETAPA 4 (Vibe) -->
+        <div class="step" id="step-4">
             <div class="card">
                 <h2>VAMOS!</h2>
                 <div class="grid-options" id="grid-vibes"></div>
@@ -286,20 +286,18 @@
             </div>
         </div>
 
-        <!-- ETAPA 6 -->
-        <div class="step" id="step-6">
+        <!-- ETAPA 5 (Resumo Final) -->
+        <div class="step" id="step-5">
             <div style="margin-bottom: 5px;">
                 <div style="font-size: 55px; background-color: transparent; width: 85px; height: 85px; display: flex; align-items: center; justify-content: center; margin: 0 auto; border-radius: 50%; border: 2px solid #6d2d91; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">😈</div>
             </div>
             <div class="card">
                 <h2>TÔ CONTIGO, GATINHA 🖤</h2>
                 
-                
                 <div class="summary-box">
                     <div>📅 <span id="resumo-data">29 de agosto de 2026</span></div>
                     <div>⏰ <span id="resumo-hora">18:00</span></div>
-                    <div>🍽️ <span id="resumo-comida">Massas</span></div>
-                    <div>🎨 <span id="resumo-vibe">Cinema</span></div>
+                    <div>🎨 <span id="resumo-vibe">Date no Cemitério</span></div>
                 </div>
 
                 <button class="btn" style="background-color: #6d2d91;" onclick="enviarWhatsApp()">MANDAR NO WHATSAPP 🖤</button>
@@ -309,71 +307,35 @@
     </div>
 
     <script>
-        // Número de WhatsApp fixo (altere se precisar)
         let numeroConfigurado = "5511977437560";
-        
-        // Listas estáticas (adicione ou remova itens diretamente aqui)
-        let listaComidas = ['Hambúrguer', 'Sushi', 'Massas', 'Tacos', 'Pizza'];
+        let dataFixa = "2026-08-29";
         let listaVibes = ['Date no Cemitério'];
 
-        const fotosComidaMap = {
-            'hambúrguer': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80',
-            'hamburguer': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80',
-            'sushi': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80',
-            'massas': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=400&q=80',
-            'massa': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=400&q=80',
-            'pasta': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=400&q=80',
-            'tacos': 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=400&q=80',
-            'pizza': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80'
-        };
-
+        // Link atualizado com uma imagem gótica de cemitério de alta qualidade e com melhor enquadramento
         const fotosVibeMap = {
-            'Date no Cemitério':'https://www.reddit.com/media?url=https%3A%2F%2Fpreview.redd.it%2Fdoes-tulsa-have-any-gothic-or-victorian-style-graveyards-v0-snglkqyjzx0f1.jpeg%3Fwidth%3D640%26crop%3Dsmart%26auto%3Dwebp%26s%3D908ca1433f8a4448a16ff9fdbeb5897d310736db',
-            'golfe': 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=400&q=80',
-            'caminhada': 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=400&q=80',
-            'cinema': 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80',
-            'dança': 'https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=400&q=80',
-            'parque': 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=400&q=80',
-            'praia': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80'
+            'date no cemitério': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe7oeGN37f3lMGQzLpKyFcYaCUY0S4b470h52BSw_hlA&s=10'
         };
 
         const fotosGenericas = [
-            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80',
-            'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=80',
-            'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=400&q=80'
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe7oeGN37f3lMGQzLpKyFcYaCUY0S4b470h52BSw_hlA&s=10'
         ];
 
         function obterFotoCard(nomeItem, tipo) {
             const chave = nomeItem.toLowerCase().trim();
-            if (tipo === 'comida' && fotosComidaMap[chave]) {
-                return fotosComidaMap[chave];
-            }
             if (tipo === 'vibe' && fotosVibeMap[chave]) {
                 return fotosVibeMap[chave];
             }
-            const indexHash = chave.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-            return fotosGenericas[indexHash % fotosGenericas.length];
+            return fotosGenericas[0];
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const hoje = new Date().toISOString().split('T')[0];
             const inputData = document.getElementById('input-data');
-            if (inputData) inputData.min = hoje;
+            if (inputData) {
+                inputData.min = dataFixa;
+                inputData.max = dataFixa;
+                inputData.value = dataFixa;
+            }
 
-            // Renderiza Comidas de forma estática
-            const gridComidas = document.getElementById('grid-comidas');
-            gridComidas.innerHTML = '';
-            listaComidas.forEach(comida => {
-                const urlFoto = obterFotoCard(comida, 'comida');
-                const card = document.createElement('div');
-                card.className = 'option-card';
-                card.style.backgroundImage = `url('${urlFoto}')`;
-                card.setAttribute('onclick', `selecionarComida(this, '${comida}')`);
-                card.innerHTML = `<span>${comida}</span>`;
-                gridComidas.appendChild(card);
-            });
-
-            // Renderiza Vibes de forma estática
             const gridVibes = document.getElementById('grid-vibes');
             gridVibes.innerHTML = '';
             listaVibes.forEach(vibe => {
@@ -389,7 +351,7 @@
 
         const frasesNao = ["NÃO", "TEM CERTEZA?", "PENSA BEM", "SÉRIO?", "PENSE NOVAMENTE", "NÃO FAZ ISSO", "ERRADO!", "TENTA O OUTRO"];
         let indiceFrase = 0;
-        let dataEscolhida = "", horaEscolhida = "", comidaEscolhida = "", vibeEscolhida = "";
+        let dataEscolhida = "", horaEscolhida = "", vibeEscolhida = "";
 
         function criarCoracao() {
             const container = document.getElementById('hearts-container');
@@ -420,59 +382,19 @@
             btnNao.style.top = `${Math.max(20, Math.floor(Math.random() * alturaMax))}px`;
         }
 
-        function verificarCamposData() {
-            const dataInput = document.getElementById('input-data').value;
-            const horaInput = document.getElementById('input-hora').value;
-            const btnProximo = document.getElementById('btn-proximo-data');
-            const agora = new Date();
-            const dataSelecionadaObj = new Date(dataInput + 'T' + (horaInput || '00:00'));
-
-            if (dataInput && dataSelecionadaObj < agora) {
-                alert('Você não pode selecionar uma data ou horário que já passou!');
-                document.getElementById('input-hora').value = '';
-                btnProximo.style.opacity = '0.5';
-                btnProximo.style.pointerEvents = 'none';
-                return;
-            }
-
-            if (dataInput && horaInput) {
-                btnProximo.style.opacity = '1';
-                btnProximo.style.pointerEvents = 'auto';
-            } else {
-                btnProximo.style.opacity = '0.5';
-                btnProximo.style.pointerEvents = 'none';
-            }
-        }
-
         function salvarDataEAvancar() {
-            const dataInput = document.getElementById('input-data').value;
             const horaInput = document.getElementById('input-hora').value;
-            if (!dataInput || !horaInput) return;
+            if (!horaInput) return;
 
-            dataEscolhida = dataInput;
+            dataEscolhida = dataFixa;
             horaEscolhida = horaInput;
 
             const [ano, mes, dia] = dataEscolhida.split('-');
             const meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
             document.getElementById('resumo-data').innerText = `${dia} de ${meses[parseInt(mes) - 1]} de ${ano}`;
             document.getElementById('resumo-hora').innerText = horaEscolhida;
+            
             proximaEtapa(4);
-        }
-
-        function selecionarComida(elemento, comida) {
-            elemento.closest('.step').querySelectorAll('.option-card').forEach(opt => opt.classList.remove('selected'));
-            elemento.classList.add('selected');
-            comidaEscolhida = comida;
-            const btnComida = document.getElementById('btn-comida');
-            btnComida.innerText = `CONFIRMAR ${comida.toUpperCase()} 🖤`;
-            btnComida.style.opacity = '1';
-            btnComida.style.pointerEvents = 'auto';
-        }
-
-        function salvarComidaEAvancar() {
-            if (!comidaEscolhida) return;
-            document.getElementById('resumo-comida').innerText = comidaEscolhida;
-            proximaEtapa(5);
         }
 
         function selecionarVibe(elemento, vibe) {
@@ -488,11 +410,11 @@
         function salvarVibeEAvancar() {
             if (!vibeEscolhida) return;
             document.getElementById('resumo-vibe').innerText = vibeEscolhida;
-            proximaEtapa(6);
+            proximaEtapa(5);
         }
 
         function enviarWhatsApp() {
-            const texto = `Oie! Aceitei o date sim! S2\n\nFicou marcado:\n- Data: ${document.getElementById('resumo-data').innerText}\n- Horario: ${document.getElementById('resumo-hora').innerText}\n- Comida: ${document.getElementById('resumo-comida').innerText}\n- Vibe: ${document.getElementById('resumo-vibe').innerText}\n\nJa pode ir me buscar!`;
+            const texto = `Oie! Aceitei o date sim! S2\n\nFicou marcado:\n- Data: ${document.getElementById('resumo-data').innerText}\n- Horario: ${document.getElementById('resumo-hora').innerText}\n- Vibe: ${document.getElementById('resumo-vibe').innerText}\n\nJa pode ir me buscar!`;
             window.open(`https://wa.me/${numeroConfigurado}?text=${encodeURIComponent(texto)}`, '_blank');
         }
     </script>
