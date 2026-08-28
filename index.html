@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quer ir a um date comigo? 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 20% 10%, rgba(126, 58, 179, 0.32), transparent 30%),
+                radial-gradient(circle at 85% 80%, rgba(82, 34, 122, 0.35), transparent 32%),
+                linear-gradient(135deg, #09050f 0%, #1b0b29 45%, #3a1455 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #fff;
+            position: relative;
+        }
+
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            color: rgba(0, 0, 0, 0.4);
+            font-size: 24px;
+            animation: flyBat 6s infinite linear;
+        }
+
+        @keyframes flyBat {
+            0% { transform: translateY(0) scale(0.8); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-105vh) scale(1.2); opacity: 0; }
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .step {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .step.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(32, 12, 46, 0.97), rgba(14, 7, 21, 0.98));
+            border-radius: 20px;
+            padding: 25px 20px;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            border: 2px solid #63318a;
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #e6cfff;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #e6cfff;
+        }
+
+        .label-input {
+            display: block;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #e6cfff;
+            margin-bottom: 5px;
+            margin-left: 5px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 50px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #7c35ad, #b45cff);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #8d43c2, #c16bff);
+        }
+
+        #btn-nao {
+            background-color: #321541;
+            position: relative;
+            transition: 0.15s ease-out;
+            white-space: nowrap;
+            width: auto;
+        }
+
+        input[type="date"], input[type="time"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            border: 2px solid #63318a;
+            background-color: #160b20;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-align: center;
+            outline: none;
+            cursor: pointer;
+        }
+
+        ::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-card {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #63318a;
+            border-radius: 15px;
+            height: 95px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .option-card span {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding-bottom: 10px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 40%, transparent 100%);
+            padding-top: 15px;
+        }
+
+        .option-card:hover {
+            transform: scale(1.03);
+            border-color: #e6cfff;
+        }
+
+        .option-card.selected {
+            border-color: #b66cff;
+            box-shadow: 0 0 16px rgba(181, 92, 255, 0.75);
+            transform: scale(1.05);
+        }
+
+        .summary-box {
+            text-align: left;
+            background-color: #160b20;
+            border: 2px solid #63318a;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #e6cfff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <div class="main-container">
+        
+        <!-- ETAPA 1 -->
+        <div class="step active" id="step-1">
+            <div style="font-size: 80px; margin-bottom: 15px;">🧛</div>
+            <div class="card">
+                <h2>VOCÊ ACEITARIA IR A UM DATE COMIGO?</h2>
+                <div class="btn-group">
+                    <button class="btn" style="width: auto;" onclick="proximaEtapa(2)">SIM</button>
+                    <button class="btn" id="btn-nao" onmouseover="fugir()" ontouchstart="fugir()">NÃO</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETAPA 2 -->
+        <div class="step" id="step-2">
+            <div style="font-size: 80px; margin-bottom: 15px;">😏🌹</div>
+            <div class="card">
+                <h2>VOCÊ DISSE SIM? 🖤</h2>
+                <p>Eu estava esperando por isso</p>
+                <button class="btn" onclick="proximaEtapa(3)">PRÓXIMO 🖤</button>
+            </div>
+        </div>
+
+        <!-- ETAPA 3 -->
+        <div class="step" id="step-3">
+            <div class="card">
+                <h2>📅 QUANDO VOCÊ TÁ LIVRE?</h2>
+                
+                <label class="label-input">Escolhe a data</label>
+                <input type="date" id="input-data" onchange="verificarCamposData()" onclick="this.showPicker && this.showPicker()">
+
+                <label class="label-input">Escolhe o horário</label>
+                <input type="time" id="input-hora" value="18:00" onchange="verificarCamposData()" onclick="this.showPicker && this.showPicker()">
+
+                <button class="btn" id="btn-proximo-data" style="opacity: 0.5; pointer-events: none;" onclick="salvarDataEAvancar()">SELECIONAR A DATA 🖤</button>
+            </div>
+        </div>
+
+        <!-- ETAPA 4 -->
+        <div class="step" id="step-4">
+            <div class="card">
+                <h2>VAMOS DE:</h2>
+                <div class="grid-options" id="grid-comidas"></div>
+                <button class="btn" id="btn-comida" style="opacity: 0.5; pointer-events: none;" onclick="salvarComidaEAvancar()">ESCOLHE PRIMEIRO 👇</button>
+            </div>
+        </div>
+
+        <!-- ETAPA 5 -->
+        <div class="step" id="step-5">
+            <div class="card">
+                <h2>VAMOS!</h2>
+                <div class="grid-options" id="grid-vibes"></div>
+                <button class="btn" id="btn-vibe" style="opacity: 0.5; pointer-events: none;" onclick="salvarVibeEAvancar()">ESCOLHE PRIMEIRO 👇</button>
+            </div>
+        </div>
+
+        <!-- ETAPA 6 -->
+        <div class="step" id="step-6">
+            <div style="margin-bottom: 5px;">
+                <div style="font-size: 55px; background-color: transparent; width: 85px; height: 85px; display: flex; align-items: center; justify-content: center; margin: 0 auto; border-radius: 50%; border: 2px solid #6d2d91; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">😈</div>
+            </div>
+            <div class="card">
+                <h2>TÔ CONTIGO, GATINHA. 🖤</h2>
+                <p style="font-size: 0.95rem; margin-bottom: 15px;">Fica pronta que eu vou te buscar 🚗</p>
+                
+                <div class="summary-box">
+                    <div>📅 <span id="resumo-data">29 de agosto de 2026</span></div>
+                    <div>⏰ <span id="resumo-hora">18:00</span></div>
+                    <div>🍽️ <span id="resumo-comida">Massas</span></div>
+                    <div>🎨 <span id="resumo-vibe">Cinema</span></div>
+                </div>
+
+                <button class="btn" style="background-color: #6d2d91;" onclick="enviarWhatsApp()">MANDAR NO WHATSAPP 🖤</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Número de WhatsApp fixo (altere se precisar)
+        let numeroConfigurado = "5511999999999";
+        
+        // Listas estáticas (adicione ou remova itens diretamente aqui)
+        let listaComidas = ['Hambúrguer', 'Sushi', 'Massas', 'Tacos', 'Pizza'];
+        let listaVibes = ['Golfe', 'Caminhada', 'Cinema', 'Dança', 'Parque', 'Praia'];
+
+        const fotosComidaMap = {
+            'hambúrguer': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80',
+            'hamburguer': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80',
+            'sushi': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80',
+            'massas': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=400&q=80',
+            'massa': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=400&q=80',
+            'pasta': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=400&q=80',
+            'tacos': 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=400&q=80',
+            'pizza': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80'
+        };
+
+        const fotosVibeMap = {
+            'golfe': 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=400&q=80',
+            'caminhada': 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=400&q=80',
+            'cinema': 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80',
+            'dança': 'https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=400&q=80',
+            'parque': 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=400&q=80',
+            'praia': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80'
+        };
+
+        const fotosGenericas = [
+            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=400&q=80'
+        ];
+
+        function obterFotoCard(nomeItem, tipo) {
+            const chave = nomeItem.toLowerCase().trim();
+            if (tipo === 'comida' && fotosComidaMap[chave]) {
+                return fotosComidaMap[chave];
+            }
+            if (tipo === 'vibe' && fotosVibeMap[chave]) {
+                return fotosVibeMap[chave];
+            }
+            const indexHash = chave.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            return fotosGenericas[indexHash % fotosGenericas.length];
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const hoje = new Date().toISOString().split('T')[0];
+            const inputData = document.getElementById('input-data');
+            if (inputData) inputData.min = hoje;
+
+            // Renderiza Comidas de forma estática
+            const gridComidas = document.getElementById('grid-comidas');
+            gridComidas.innerHTML = '';
+            listaComidas.forEach(comida => {
+                const urlFoto = obterFotoCard(comida, 'comida');
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.style.backgroundImage = `url('${urlFoto}')`;
+                card.setAttribute('onclick', `selecionarComida(this, '${comida}')`);
+                card.innerHTML = `<span>${comida}</span>`;
+                gridComidas.appendChild(card);
+            });
+
+            // Renderiza Vibes de forma estática
+            const gridVibes = document.getElementById('grid-vibes');
+            gridVibes.innerHTML = '';
+            listaVibes.forEach(vibe => {
+                const urlFoto = obterFotoCard(vibe, 'vibe');
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.style.backgroundImage = `url('${urlFoto}')`;
+                card.setAttribute('onclick', `selecionarVibe(this, '${vibe}')`);
+                card.innerHTML = `<span>${vibe}</span>`;
+                gridVibes.appendChild(card);
+            });
+        });
+
+        const frasesNao = ["NÃO", "TEM CERTEZA?", "PENSA BEM", "SÉRIO?", "PENSE NOVAMENTE", "NÃO FAZ ISSO", "ERRADO!", "TENTA O OUTRO"];
+        let indiceFrase = 0;
+        let dataEscolhida = "", horaEscolhida = "", comidaEscolhida = "", vibeEscolhida = "";
+
+        function criarCoracao() {
+            const container = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '🦇';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
+        }
+        setInterval(criarCoracao, 400);
+
+        function proximaEtapa(numeroEtapa) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById(`step-${numeroEtapa}`).classList.add('active');
+        }
+
+        function fugir() {
+            const btnNao = document.getElementById('btn-nao');
+            if (btnNao.style.position !== 'fixed') btnNao.style.position = 'fixed';
+            indiceFrase = (indiceFrase + 1) % frasesNao.length;
+            btnNao.innerText = frasesNao[indiceFrase];
+            const larguraMax = window.innerWidth - btnNao.offsetWidth - 40;
+            const alturaMax = window.innerHeight - btnNao.offsetHeight - 40;
+            btnNao.style.left = `${Math.max(20, Math.floor(Math.random() * larguraMax))}px`;
+            btnNao.style.top = `${Math.max(20, Math.floor(Math.random() * alturaMax))}px`;
+        }
+
+        function verificarCamposData() {
+            const dataInput = document.getElementById('input-data').value;
+            const horaInput = document.getElementById('input-hora').value;
+            const btnProximo = document.getElementById('btn-proximo-data');
+            const agora = new Date();
+            const dataSelecionadaObj = new Date(dataInput + 'T' + (horaInput || '00:00'));
+
+            if (dataInput && dataSelecionadaObj < agora) {
+                alert('Você não pode selecionar uma data ou horário que já passou!');
+                document.getElementById('input-hora').value = '';
+                btnProximo.style.opacity = '0.5';
+                btnProximo.style.pointerEvents = 'none';
+                return;
+            }
+
+            if (dataInput && horaInput) {
+                btnProximo.style.opacity = '1';
+                btnProximo.style.pointerEvents = 'auto';
+            } else {
+                btnProximo.style.opacity = '0.5';
+                btnProximo.style.pointerEvents = 'none';
+            }
+        }
+
+        function salvarDataEAvancar() {
+            const dataInput = document.getElementById('input-data').value;
+            const horaInput = document.getElementById('input-hora').value;
+            if (!dataInput || !horaInput) return;
+
+            dataEscolhida = dataInput;
+            horaEscolhida = horaInput;
+
+            const [ano, mes, dia] = dataEscolhida.split('-');
+            const meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+            document.getElementById('resumo-data').innerText = `${dia} de ${meses[parseInt(mes) - 1]} de ${ano}`;
+            document.getElementById('resumo-hora').innerText = horaEscolhida;
+            proximaEtapa(4);
+        }
+
+        function selecionarComida(elemento, comida) {
+            elemento.closest('.step').querySelectorAll('.option-card').forEach(opt => opt.classList.remove('selected'));
+            elemento.classList.add('selected');
+            comidaEscolhida = comida;
+            const btnComida = document.getElementById('btn-comida');
+            btnComida.innerText = `CONFIRMAR ${comida.toUpperCase()} 🖤`;
+            btnComida.style.opacity = '1';
+            btnComida.style.pointerEvents = 'auto';
+        }
+
+        function salvarComidaEAvancar() {
+            if (!comidaEscolhida) return;
+            document.getElementById('resumo-comida').innerText = comidaEscolhida;
+            proximaEtapa(5);
+        }
+
+        function selecionarVibe(elemento, vibe) {
+            elemento.closest('.step').querySelectorAll('.option-card').forEach(opt => opt.classList.remove('selected'));
+            elemento.classList.add('selected');
+            vibeEscolhida = vibe;
+            const btnVibe = document.getElementById('btn-vibe');
+            btnVibe.innerText = `CONFIRMAR ${vibe.toUpperCase()} 🖤`;
+            btnVibe.style.opacity = '1';
+            btnVibe.style.pointerEvents = 'auto';
+        }
+
+        function salvarVibeEAvancar() {
+            if (!vibeEscolhida) return;
+            document.getElementById('resumo-vibe').innerText = vibeEscolhida;
+            proximaEtapa(6);
+        }
+
+        function enviarWhatsApp() {
+            const texto = `Oie! Aceitei o date sim! S2\n\nFicou marcado:\n- Data: ${document.getElementById('resumo-data').innerText}\n- Horario: ${document.getElementById('resumo-hora').innerText}\n- Comida: ${document.getElementById('resumo-comida').innerText}\n- Vibe: ${document.getElementById('resumo-vibe').innerText}\n\nJa pode ir me buscar!`;
+            window.open(`https://wa.me/${numeroConfigurado}?text=${encodeURIComponent(texto)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
